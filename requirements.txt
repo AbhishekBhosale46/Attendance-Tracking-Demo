@@ -4,3 +4,4 @@ streamlit==1.8.1
 pandas==1.4.2
 streamlit_authenticator==0.1.5
 deta==1.1.0
+python-dotenv~=0.20.0

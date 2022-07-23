@@ -6,24 +6,37 @@ import pandas as pd
 import streamlit_authenticator as sauth
 from datetime import date
 import database as db
+import os
+from dotenv import load_dotenv
 
-firebaseConfig = {'apiKey': "AIzaSyAB2ZRlEuIueuyssEoU8v7vFo_i7NvwWkE",
-                  'authDomain': "pythonfirebase-f004f.firebaseapp.com",
-                  'databaseURL': "https://pythonfirebase-f004f-default-rtdb.firebaseio.com/",
-                  'projectId': "pythonfirebase-f004f",
-                  'storageBucket': "pythonfirebase-f004f.appspot.com",
-                  'messagingSenderId': "1092004919646",
-                  'appId': "1:1092004919646:web:11ab928d8c3e13561b37cf",
-                  'measurementId': "G-08VGHXL7XN"}
+load_dotenv(".env")
+configStr = os.getenv("CONFIG_STR")
+firebaseConfiglist = configStr.split(' ')
+
+
+def todict(lst):
+    it = iter(lst)
+    dct = dict(zip(it, it))
+    return dct
+
+
+firebaseConfig = todict(firebaseConfiglist)
+
+# firebaseConfig = {'apiKey': "AIzaSyAB2ZRlEuIueuyssEoU8v7vFo_i7NvwWkE",
+#                   'authDomain': "pythonfirebase-f004f.firebaseapp.com",
+#                   'databaseURL': "https://pythonfirebase-f004f-default-rtdb.firebaseio.com/",
+#                   'projectId': "pythonfirebase-f004f",
+#                   'storageBucket': "pythonfirebase-f004f.appspot.com",
+#                   'messagingSenderId': "1092004919646",
+#                   'appId': "1:1092004919646:web:11ab928d8c3e13561b37cf",
+#                   'measurementId': "G-08VGHXL7XN"}
 
 
 # ---INITIALIZE APP WITH GIVEN FB CONFIG---
 firebase = pyrebase.initialize_app(firebaseConfig)
 
-
 # ---CREATE A DATABASE---
 fbdb = firebase.database()
-
 
 # ---USERNAME & PASS FOR PROFESSORS USER AUTHENTICATION---
 users = db.fetch_users()
@@ -33,7 +46,6 @@ hashed_passwords = [user["password"] for user in users]
 authenticator = sauth.Authenticate(names, usernames, hashed_passwords,
                                    "attendancetracking", "abcdxyz", cookie_expiry_days=30)
 
-
 # ---Removes the top padding---
 st.markdown('''<style>
                 div.block-container{padding-top:0rem;}
@@ -42,7 +54,6 @@ st.markdown('''<style>
                 backdrop-filter: none;
                 }
                 </style>''', unsafe_allow_html=True)
-
 
 # ---Display the pict logo---
 st.markdown('''
@@ -153,7 +164,6 @@ st.markdown('''
 # ---DISPLAY THE LOGIN FORM---
 name, authentication_status, username = authenticator.login('Login', 'main')
 
-
 # ---EXECUTE IF LOGIN SUCCESSFUL
 if authentication_status:
 
@@ -227,12 +237,15 @@ if authentication_status:
                     fbdb.child("Students2").child(div).child(s.key()).child("Subjects").child(subName).child(d).set("P")
                 else:
                     if not str(s.val()['RollNo']).endswith(absentRollList[i]):
-                        if str(fbdb.child("Students2").child(div).child(s.key()).child("Subjects").child(subName).child(d).get().val()) == "A":
+                        if str(fbdb.child("Students2").child(div).child(s.key()).child("Subjects").child(subName).child(
+                                d).get().val()) == "A":
                             continue
                         else:
-                            fbdb.child("Students2").child(div).child(s.key()).child("Subjects").child(subName).child(d).set("P")
+                            fbdb.child("Students2").child(div).child(s.key()).child("Subjects").child(subName).child(
+                                d).set("P")
                     else:
-                        fbdb.child("Students2").child(div).child(s.key()).child("Subjects").child(subName).child(d).set("A")
+                        fbdb.child("Students2").child(div).child(s.key()).child("Subjects").child(subName).child(d).set(
+                            "A")
         placeholder.success("Attendance marked successfully ! ")
 
     # ---SHOWS THE ATTENDANCE OF WHOLE CLASS---
@@ -241,19 +254,21 @@ if authentication_status:
         dfdict = collections.defaultdict(list)
         for s in students.each():
             studnames = fbdb.child("Students2").child(div).child(s.key()).child('Name').get().val()
-            attendanceDate = list(fbdb.child("Students2").child(div).child(s.key()).child('Subjects').child(subName).get().val().keys())
-            attendancestatus = list(fbdb.child("Students2").child(div).child(s.key()).child('Subjects').child(subName).get().val().values())
+            attendanceDate = list(
+                fbdb.child("Students2").child(div).child(s.key()).child('Subjects').child(subName).get().val().keys())
+            attendancestatus = list(
+                fbdb.child("Students2").child(div).child(s.key()).child('Subjects').child(subName).get().val().values())
             attended = 0
             dfdict['Name'].append(studnames)
             for i in range(len(attendanceDate)):
                 if attendancestatus[i] == 'P':
-                    attended +=1
+                    attended += 1
                 dfdict[attendanceDate[i]].append(attendancestatus[i])
             dfdict['Conducted'].append(len(attendanceDate))
             dfdict['Attended'].append(attended)
             dfdict['Percentage'].append(round(100 - ((len(attendanceDate) - attended) / len(attendanceDate) * 100), 2))
         attendancedataframe = (pd.DataFrame(dfdict)).astype(str)
-        attendancedataframe.index = np.arange(1, len(attendancedataframe)+1)
+        attendancedataframe.index = np.arange(1, len(attendancedataframe) + 1)
         placeholder.info("Attendance fetched successfully !")
         with st.expander("ATTENDANCE TILL DATE : "):
             st.dataframe(attendancedataframe)
@@ -266,4 +281,3 @@ elif authentication_status == False:
     st.error('Username/password is incorrect')
 elif authentication_status == None:
     st.warning('Please enter your username and password')
-
