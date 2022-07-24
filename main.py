@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv(".env")
 configStr = os.getenv("CONFIG_STR")
-#firebaseConfiglist = configStr.split(' ')
+firebaseConfiglist = configStr.split(' ')
 
 
 def todict(lst):
@@ -20,7 +20,7 @@ def todict(lst):
     return dct
 
 
-#firebaseConfig = todict(firebaseConfiglist)
+firebaseConfig = todict(firebaseConfiglist)
 
 firebaseConfig1 = {'apiKey': "AIzaSyAB2ZRlEuIueuyssEoU8v7vFo_i7NvwWkE",
                   'authDomain': "pythonfirebase-f004f.firebaseapp.com",
@@ -33,7 +33,7 @@ firebaseConfig1 = {'apiKey': "AIzaSyAB2ZRlEuIueuyssEoU8v7vFo_i7NvwWkE",
 
 
 # ---INITIALIZE APP WITH GIVEN FB CONFIG---
-firebase = pyrebase.initialize_app(firebaseConfig1)
+firebase = pyrebase.initialize_app(firebaseConfig)
 
 # ---CREATE A DATABASE---
 fbdb = firebase.database()
