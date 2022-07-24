@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv(".env")
 configStr = os.getenv("CONFIG_STR")
-firebaseConfiglist = configStr.split(' ')
+#firebaseConfiglist = configStr.split(' ')
 
 
 def todict(lst):
@@ -20,20 +20,20 @@ def todict(lst):
     return dct
 
 
-firebaseConfig = todict(firebaseConfiglist)
+#firebaseConfig = todict(firebaseConfiglist)
 
-# firebaseConfig = {'apiKey': "AIzaSyAB2ZRlEuIueuyssEoU8v7vFo_i7NvwWkE",
-#                   'authDomain': "pythonfirebase-f004f.firebaseapp.com",
-#                   'databaseURL': "https://pythonfirebase-f004f-default-rtdb.firebaseio.com/",
-#                   'projectId': "pythonfirebase-f004f",
-#                   'storageBucket': "pythonfirebase-f004f.appspot.com",
-#                   'messagingSenderId': "1092004919646",
-#                   'appId': "1:1092004919646:web:11ab928d8c3e13561b37cf",
-#                   'measurementId': "G-08VGHXL7XN"}
+firebaseConfig1 = {'apiKey': "AIzaSyAB2ZRlEuIueuyssEoU8v7vFo_i7NvwWkE",
+                  'authDomain': "pythonfirebase-f004f.firebaseapp.com",
+                  'databaseURL': "https://pythonfirebase-f004f-default-rtdb.firebaseio.com/",
+                  'projectId': "pythonfirebase-f004f",
+                  'storageBucket': "pythonfirebase-f004f.appspot.com",
+                  'messagingSenderId': "1092004919646",
+                  'appId': "1:1092004919646:web:11ab928d8c3e13561b37cf",
+                  'measurementId': "G-08VGHXL7XN"}
 
 
 # ---INITIALIZE APP WITH GIVEN FB CONFIG---
-firebase = pyrebase.initialize_app(firebaseConfig)
+firebase = pyrebase.initialize_app(firebaseConfig1)
 
 # ---CREATE A DATABASE---
 fbdb = firebase.database()
@@ -57,13 +57,13 @@ st.markdown('''<style>
 
 # ---Display the pict logo---
 st.markdown('''
-            <p style="text-align:center; margin-bottom:-25px; margin-top:-30px;"> 
+            <p style="text-align:center; margin-bottom:-25px; margin-top:-10px;"> 
             <img src="https://www.freepnglogos.com/uploads/hogwarts-logo-png/welcome-hogwarts-school-witchcraft-wizardry-16.png" class="img-fluid hover-shadow" height="144dp" width="144dp" alt="Cinque Terre">
             </p>
             ''', unsafe_allow_html=True)
 
 # ---Centers the title---
-st.title("📒 FE Attendance Tracking")
+st.title("📒 Attendance Tracking")
 st.markdown('''
             <style>
             .css-10trblm {
