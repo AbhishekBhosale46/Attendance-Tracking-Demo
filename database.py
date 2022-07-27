@@ -1,6 +1,9 @@
 from deta import Deta
+import os
+from dotenv import load_dotenv
 
-key = 'c02b0rap_raU7wvNb1haRR4osTbCivV8gcDiaFpgG'
+load_dotenv(".env")
+key = os.getenv("DETA_KEY")
 
 # Initialize app with deta key
 deta = Deta(key)
