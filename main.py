@@ -22,15 +22,6 @@ def todict(lst):
 
 firebaseConfig = todict(firebaseConfiglist)
 
-firebaseConfig1 = {'apiKey': "AIzaSyAB2ZRlEuIueuyssEoU8v7vFo_i7NvwWkE",
-                  'authDomain': "pythonfirebase-f004f.firebaseapp.com",
-                  'databaseURL': "https://pythonfirebase-f004f-default-rtdb.firebaseio.com/",
-                  'projectId': "pythonfirebase-f004f",
-                  'storageBucket': "pythonfirebase-f004f.appspot.com",
-                  'messagingSenderId': "1092004919646",
-                  'appId': "1:1092004919646:web:11ab928d8c3e13561b37cf",
-                  'measurementId': "G-08VGHXL7XN"}
-
 
 # ---INITIALIZE APP WITH GIVEN FB CONFIG---
 firebase = pyrebase.initialize_app(firebaseConfig)
